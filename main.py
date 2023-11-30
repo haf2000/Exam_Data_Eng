@@ -1,7 +1,6 @@
-from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics.cluster import normalized_mutual_info_score, adjusted_rand_score
-from sentence_transformers import SentenceTransformer
 import numpy as np
+import pandas as pd
 from sklearn.decomposition import PCA
 import umap
 import matplotlib.pyplot as plt
@@ -70,14 +69,8 @@ def clust(mat, k):
     return cluster_labels
 
 # import data
-ng20 = fetch_20newsgroups(subset='test')
-corpus = ng20.data[:2000]
-labels = ng20.target[:2000]
-k = len(set(labels))
-
-# embedding
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-embeddings = model.encode(corpus)
+embeddings_df = pd.read_csv('./embeddings.csv')
+embeddings = embedding_df.to_numpy()
 
 # perform dimentionality reduction
 tsne_emb = tsne_red(embeddings, 20)
