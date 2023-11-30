@@ -4,6 +4,8 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+import umap
+import matplotlib.pyplot as plt
 
 
 def acp_dim_red(mat, p):    
@@ -14,12 +16,28 @@ def acp_dim_red(mat, p):
     -----
         mat : NxM list 
         p : number of dimensions to keep 
-    Output:
-    ------
+    Output :
+    ----
         red_mat : NxP list such that p<<m
     '''
     pca = PCA(n_components=p)
     red_mat = pca.fit_transform(mat)
+    return red_mat
+
+# Define our dimensionality reduction UMAP function
+def dim_red_umap(mat, p):
+    '''
+    Perform dimensionality reduction using UMAP
+
+    Input:
+    -----
+        mat : NxM list
+        p : number of dimensions to keep
+    ------
+        red_mat : NxP list such that p<<m
+    '''
+    umap_model = umap.UMAP(n_components=p)
+    red_mat = umap_model.fit_transform(embeddings)
     return red_mat
 
 
@@ -53,6 +71,7 @@ embeddings = model.encode(corpus)
 
 # perform dimentionality reduction
 red_acp_emb = acp_dim_red(embeddings, 20)
+red_emb_umap = dim_red_umap(embeddings, 20)
 
 # perform clustering
 pred_acp_kmeans = clust(red_acp_emb, k)
@@ -62,3 +81,11 @@ nmi_score_acp = normalized_mutual_info_score(pred_acp_kmeans,labels)
 ari_score_acp = adjusted_rand_score(pred_acp_kmeans,labels)
 
 print(f'NMI: {nmi_score_acp:.2f} \nARI: {ari_score_acp:.2f}')
+
+pred_umap = clust(red_emb_umap, k)
+
+# evaluate clustering results
+nmi_score_umap = normalized_mutual_info_score(pred_umap,labels)
+ari_score_umap = adjusted_rand_score(pred_umap,labels)
+
+print(f'NMI: {nmi_score_umap:.2f} \nARI: {ari_score_umap:.2f}')
