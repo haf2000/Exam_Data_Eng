@@ -1,5 +1,5 @@
-sentence-transformers
 scikit-learn
 numpy
+pandas
 umap-learn
 matplotlib
