@@ -1,3 +1,5 @@
-sentence_transformers
-sklearn
+sentence-transformers
+scikit-learn
 numpy
+umap-learn
+matplotlib
