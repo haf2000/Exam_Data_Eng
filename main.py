@@ -68,7 +68,7 @@ embeddings = model.encode(corpus)
 # perform dimentionality reduction
 tsne_emb = tsne_red(embeddings, 20)
 
-# perform clustering
+# perform clustering after TSNE
 pred_tsne = clust(tsne_emb, k)
 
 # evaluate clustering results
